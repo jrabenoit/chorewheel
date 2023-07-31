@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chorewheel_web/models/schedule.dart';
+import 'package:chorewheel/models/schedule.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,6 +28,7 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
 
 
 class CurrentMembersView extends StatelessWidget {
@@ -73,7 +74,7 @@ class CurrentDateNightView extends StatelessWidget {
       builder: (context, scheduleProvider, child) {
         return Chip(
           backgroundColor: Theme.of(context).primaryColor,
-          label: Text('Date Night: ${scheduleProvider.dateNight}',
+          label: Text('Date night: ${scheduleProvider.dateNight}',
             style: TextStyle(color: Colors.white),
           ),
         );
@@ -138,12 +139,9 @@ class ScheduleView extends StatelessWidget {
               child: ListTile(
                 title: Text('${DateFormat('MMMM d - EEEE - ').format(day.date)}${day.type} Day'),
                 subtitle: Wrap(
-                  children: day.assignments?.entries.map((entry) => GestureDetector(
-                    onTap: () => Provider.of<ScheduleProvider>(context, listen: false).toggleChoreDone(entry.key, entry.value),
-                    child: Chip(
-                      label: Text('${entry.key.name} - ${entry.value.name}'),
-                      backgroundColor: entry.value.done ? Colors.green : null,
-                    ),
+                  children: day.assignments?.entries.map((entry) => Chip(
+                    label: Text('${entry.key.name} - ${entry.value.name}'),
+                    backgroundColor: entry.value.done ? Colors.green : null,
                   )).toList() ?? [],
                 ),
               ),
@@ -154,6 +152,7 @@ class ScheduleView extends StatelessWidget {
     );
   }
 }
+
 
 class AddMemberButton extends StatelessWidget {
   @override

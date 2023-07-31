@@ -60,6 +60,16 @@ class ScheduleProvider with ChangeNotifier {
   Weekday dateNight = Weekday.friday;
   List<String> lastSchedulePattern = [];
 
+  List<List<String>> _allPatterns = [
+    ['Rest', 'Chore', 'Chore', 'Rest', 'Chore', 'Chore', 'Rest'],
+    ['Rest', 'Rest', 'Chore', 'Chore', 'Chore', 'Chore', 'Rest'],
+    ['Rest', 'Chore', 'Rest', 'Chore', 'Chore', 'Chore', 'Rest'],
+    ['Chore', 'Rest', 'Rest', 'Chore', 'Chore', 'Chore', 'Rest'],
+    ['Chore', 'Chore', 'Rest', 'Rest', 'Chore', 'Chore', 'Rest'],
+    ['Chore', 'Chore', 'Chore', 'Rest', 'Rest', 'Chore', 'Rest']
+  ];
+  int _patternIndex = 0;
+
   ScheduleProvider() {
     generateSchedule();
   }
@@ -92,9 +102,7 @@ class ScheduleProvider with ChangeNotifier {
   void generateSchedule() {
     print('Generating schedule...');
 
-    List<String> scheduleTemplate = ['Rest', 'Chore', 'Chore', 'Rest', 'Chore', 'Chore', 'Rest'];
-    int rotationAmount = lastSchedulePattern.isEmpty ? 0 : (scheduleTemplate.indexOf(lastSchedulePattern[0]) + 1) % 7;
-    List<String> newSchedulePattern = List.from(scheduleTemplate)..rotate(rotationAmount);
+    List<String> newSchedulePattern = List.from(_allPatterns[_patternIndex]);
 
     // Replace one 'Rest' day with 'Date' on the selected date night.
     newSchedulePattern[dateNight.index] = 'Date';
@@ -108,6 +116,9 @@ class ScheduleProvider with ChangeNotifier {
     for (Chore chore in chores) {
       chore.done = false;
     }
+
+    // Rotate the chores list
+    chores = chores.rotate(1);
 
     for (int i = 0; i < 7; i++) {
       DateTime date = today.add(Duration(days: i));
@@ -131,11 +142,9 @@ class ScheduleProvider with ChangeNotifier {
     lastSchedulePattern = newSchedulePattern;
 
     print('Schedule generated: $schedule');
-    notifyListeners();
-  }
 
-  void toggleChoreDone(Member member, Chore chore) {
-    chore.done = !chore.done;
+    _patternIndex = (_patternIndex + 1) % _allPatterns.length;
+
     notifyListeners();
   }
 }

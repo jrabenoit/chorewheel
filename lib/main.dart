@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chorewheel_web/models/schedule.dart';
-import 'package:chorewheel_web/screens/home_page.dart';
+import 'package:chorewheel/models/schedule.dart';
+import 'package:chorewheel/screens/home_page.dart';
 
 void main() {
   runApp(ChoreWheel());
